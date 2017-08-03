@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xsi:schemaLocation=
+           "http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+            http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
+
+  <context:annotation-config/>
+  <context:component-scan base-package="com.vatolinrp.bitcoin.price"/>
+  <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="locations">
+      <list>
+        <value>classpath:conf/base.properties</value>
+      </list>
+    </property>
+    <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_FALLBACK" />
+  </bean>
+  <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper">
+    <property name="serializationInclusion" value="NON_NULL" />
+  </bean>
+  <jaxrs:server id="server" address="http://0.0.0.0:8081">
+    <jaxrs:serviceBeans>
+      <ref bean="bitcoinPriceService" />
+    </jaxrs:serviceBeans>
+    <jaxrs:providers>
+      <bean id="cors-filter" class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter"/>
+      <bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider">
+        <property name="mapper" ref="objectMapper" />
+      </bean>
+    </jaxrs:providers>
+    <jaxrs:features>
+      <bean class="org.apache.cxf.feature.LoggingFeature"/>
+    </jaxrs:features>
+  </jaxrs:server>
+
+</beans>
