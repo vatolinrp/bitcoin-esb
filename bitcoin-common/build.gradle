@@ -30,19 +30,19 @@ dependencies {
 
     compile project (':bitcoin-model')
 
-    compile "org.springframework:spring-web:3.2.12.RELEASE"
-    compile "org.slf4j:slf4j-api:1.7.6"
-    compile "com.fasterxml.jackson.core:jackson-databind:2.4.3"
-    compile ("org.springframework.osgi:spring-osgi-core:1.2.1") {
+    compile "org.springframework:spring-web:${springframeworkVersion}"
+    compile "org.slf4j:slf4j-api:${slf4jVersion}"
+    compile "com.fasterxml.jackson.core:jackson-databind:${fasterxmlVersion}"
+    compile ("org.springframework.osgi:spring-osgi-core:${springframeworkOSGIVersion}") {
         exclude module: 'org.springframework.aop'
         exclude module: 'org.springframework.beans'
         exclude module: 'org.springframework.core'
         exclude module: 'org.springframework.context'
     }
 
-    testCompile "org.testng:testng:6.8.8"
-    testCompile "org.mockito:mockito-all:1.9.5"
-    testCompile "org.springframework:spring-test:3.2.12.RELEASE"
-    testCompile "commons-io:commons-io:2.4"
+    testCompile "org.testng:testng:${testngVersion}"
+    testCompile "org.mockito:mockito-all:${mockitoVersion}"
+    testCompile "org.springframework:spring-test:${springframeworkVersion}"
+    testCompile "commons-io:commons-io:${commonsVersion}"
 
 }
