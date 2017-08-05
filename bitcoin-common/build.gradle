@@ -32,7 +32,6 @@ dependencies {
 
     compile "org.springframework:spring-web:${springframeworkVersion}"
     compile "org.slf4j:slf4j-api:${slf4jVersion}"
-    compile "com.fasterxml.jackson.core:jackson-databind:${fasterxmlVersion}"
     compile ("org.springframework.osgi:spring-osgi-core:${springframeworkOSGIVersion}") {
         exclude module: 'org.springframework.aop'
         exclude module: 'org.springframework.beans'
