@@ -1,46 +1,4 @@
 group 'com.vatolinrp'
 version '1.0-SNAPSHOT'
 
-apply plugin: 'java'
-apply plugin: 'osgi'
-
-description = "Bitcoin price getter : common module"
-
-sourceCompatibility = 1.8
-
-jar {
-    manifest {
-        instruction 'Bundle-ManifestVersion', '2'
-        instruction 'Bundle-Name', 'Bitcoin price getter :: OSGi bundle'
-        instruction 'Bundle-Vendor', 'SK'
-        instruction 'Export-Package', '*'
-        instruction 'Import-Package',
-            'org.springframework.beans.factory.config',
-            'org.apache.cxf.feature',
-            'org.apache.cxf.rs.security.cors',
-            'com.fasterxml.jackson.databind',
-            'com.fasterxml.jackson.jaxrs.json',
-            '*'
-    }
-}
-
-repositories {
-    mavenCentral()
-    maven { url "http://sdlcbrm.hiw.com/artifactory/repo" }
-}
-
-dependencies {
-    compile "org.springframework:spring-context:3.2.12.RELEASE"
-    compile "org.springframework:spring-web:3.2.12.RELEASE"
-    compile "com.fasterxml.jackson.core:jackson-databind:2.4.3"
-    compile "com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.4.3"
-    compile "org.slf4j:slf4j-api:1.7.6"
-    compile "javax.ws.rs:javax.ws.rs-api:2.0.1"
-    compile "org.apache.cxf:cxf-rt-frontend-jaxrs:3.0.4.redhat-621084"
-    compile "org.apache.cxf:cxf-rt-rs-security-cors:3.0.4.redhat-621084"
-    compile "org.apache.cxf:cxf-core:3.0.4.redhat-621084"
-    testCompile "org.testng:testng:6.8.8"
-    testCompile "org.springframework:spring-test:3.2.12.RELEASE"
-    testCompile "org.mockito:mockito-all:1.9.5"
-    testCompile "commons-io:commons-io:2.4"
-}
+description = "Bitcoin ESB : Root module"

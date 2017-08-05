@@ -1,2 +1,4 @@
-rootProject.name = 'bitcoin-price'
-
+rootProject.name = 'bitcoin-esb'
+include 'bitcoin-model'
+include 'bitcoin-common'
+include 'bitcoin-rest'

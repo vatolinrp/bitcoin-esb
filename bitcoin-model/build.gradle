@@ -1,0 +1,30 @@
+group 'com.vatolinrp'
+version '1.0-SNAPSHOT'
+
+description = "Bitcoin ESB : Model module"
+
+apply plugin: 'java'
+apply plugin: 'osgi'
+
+sourceCompatibility = 1.8
+
+jar {
+    manifest {
+        instruction 'Bundle-ManifestVersion', '2'
+        instruction 'Bundle-Name', 'Bitcoin ESB Model :: OSGi bundle'
+        instruction 'Bundle-Vendor', 'SK'
+        instruction 'Export-Package',
+                'com.vatolinrp.bitcoin.model',
+                '*'
+        instruction 'Import-Package',
+                '*'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "com.fasterxml.jackson.core:jackson-databind:2.4.3"
+}
