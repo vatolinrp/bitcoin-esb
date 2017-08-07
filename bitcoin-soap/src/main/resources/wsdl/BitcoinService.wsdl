@@ -1,0 +1,59 @@
+<definitions name="BitcoinService"
+             targetNamespace="http://bitcoin.vatolinrp.com/wsdl/BitcoinService"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:tns="http://bitcoin.vatolinrp.com/wsdl/BitcoinService"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:localxsd="http://bitcoin.vatolinrp.com/xsd/BitcoinService">
+
+  <message name="BitcoinPricesRequest"/>
+  <message name="BitcoinPricesResponse">
+    <part name="BitcoinPricesResponse" type="localxsd:BitcoinPricesResponse"/>
+  </message>
+
+  <types>
+    <xsd:schema targetNamespace="http://bitcoin.vatolinrp.com/xsd/BitcoinService"
+                xmlns:localxsd="http://bitcoin.vatolinrp.com/xsd/BitcoinService">
+      <xsd:complexType name="BitcoinPricesResponse">
+        <xsd:sequence>
+          <xsd:element name="usd" type="localxsd:Currency" minOccurs="0"/>
+          <xsd:element name="cny" type="localxsd:Currency" minOccurs="0"/>
+          <xsd:element name="eur" type="localxsd:Currency" minOccurs="0"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="Currency">
+        <xsd:sequence>
+          <xsd:element name="last" type="xsd:double"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </types>
+
+  <portType name="BitcoinServiceInterface">
+    <operation name="getBitcoinPrices">
+      <input message="tns:BitcoinPricesRequest"/>
+      <output message="tns:BitcoinPricesResponse"/>
+    </operation>
+  </portType>
+
+  <binding name="BitcoinServiceSoap-HttpBinding" type="tns:BitcoinServiceInterface">
+    <soap:binding style="document"
+                  transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="getBitcoinPrices">
+      <soap:operation soapAction="getBitcoinPrices"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+
+  <service name="BitcoinService">
+    <port binding="tns:BitcoinServiceSoap-HttpBinding" name="BitcoinServicePortHttp">
+      <soap:address location="http://" />
+    </port>
+  </service>
+
+</definitions>

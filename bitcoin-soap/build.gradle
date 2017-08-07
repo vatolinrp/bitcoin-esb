@@ -1,0 +1,51 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "no.nils:wsdl2java:0.10"
+    }
+}
+plugins {
+    id "no.nils.wsdl2java" version "0.10"
+}
+
+repositories {
+    mavenCentral()
+}
+
+wsdl2java {
+    wsdlsToGenerate = [
+        [ '-p',
+          'com.vatolinrp.bitcoin.generated.service',
+          "$projectDir/src/main/resources/wsdl/BitcoinService.wsdl"
+        ]
+    ]
+    wsdlDir = file("$projectDir/src/main/resources/wsdl")
+}
+
+jar {
+  manifest {
+    instruction 'Bundle-ManifestVersion', '2'
+    instruction 'Bundle-Name', 'Bitcoin ESB SOAP :: OSGi bundle'
+    instruction 'Bundle-Vendor', 'SK'
+    instruction 'Export-Package',
+            'com.vatolinrp.bitcoin.service',
+            'com.vatolinrp.bitcoin.generated.service',
+            '*'
+    instruction 'Import-Package',
+            'com.vatolinrp.bitcoin.dao',
+            '*'
+  }
+}
+
+dependencies {
+    compile project (':bitcoin-model')
+    compile project (':bitcoin-common')
+
+    testCompile "org.mockito:mockito-all:${mockitoVersion}"
+    testCompile "org.springframework:spring-test:${springframeworkVersion}"
+    testCompile "org.testng:testng:${testngVersion}"
+}

@@ -75,6 +75,7 @@ subprojects {
    checkstyleMain {
        configFile = project.checkstyleConfigFile
    }
+   checkstyleMain.exclude("**/com/vatolinrp/bitcoin/generated/service/**")
    checkstyleTest {
        configFile = project.checkstyleConfigFile
    }
