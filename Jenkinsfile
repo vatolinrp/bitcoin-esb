@@ -1,3 +1,5 @@
 node {
-    checkout scm
+    stage("Checkout & Prepare") {
+        checkout scm
+    }
 }
