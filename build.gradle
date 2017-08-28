@@ -12,6 +12,7 @@ buildscript {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'osgi'
+    apply plugin: 'jacoco'
 
     test {
         useTestNG()
@@ -25,6 +26,18 @@ subprojects {
     tasks.withType(JavaCompile) {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
+    }
+
+    jacoco {
+        toolVersion = "${jacocoToolVersion}"
+    }
+
+    jacocoTestReport {
+        additionalSourceDirs = files( "java" )
+        reports {
+            xml.setEnabled( true )
+            html.setDestination( file( "${buildDir}/jacocoHtml" ) )
+        }
     }
 }
 
