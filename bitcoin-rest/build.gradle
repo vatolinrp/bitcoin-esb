@@ -1,12 +1,4 @@
-group 'com.vatolinrp'
-version '1.0-SNAPSHOT'
-
 description = "Bitcoin ESB : REST module"
-
-apply plugin: 'java'
-apply plugin: 'osgi'
-
-sourceCompatibility = 1.8
 
 jar {
     manifest {
@@ -24,11 +16,6 @@ jar {
                 'com.vatolinrp.bitcoin.dao',
                 '*'
     }
-}
-
-repositories {
-    mavenCentral()
-    maven { url "http://sdlcbrm.hiw.com/artifactory/repo" }
 }
 
 dependencies {

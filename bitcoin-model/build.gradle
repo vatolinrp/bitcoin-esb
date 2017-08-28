@@ -1,12 +1,4 @@
-group 'com.vatolinrp'
-version '1.0-SNAPSHOT'
-
 description = "Bitcoin ESB : Model module"
-
-apply plugin: 'java'
-apply plugin: 'osgi'
-
-sourceCompatibility = 1.8
 
 jar {
     manifest {
@@ -19,10 +11,6 @@ jar {
         instruction 'Import-Package',
                 '*'
     }
-}
-
-repositories {
-    mavenCentral()
 }
 
 dependencies {

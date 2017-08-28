@@ -1,16 +1,4 @@
-group 'com.vatolinrp'
-version '1.0-SNAPSHOT'
-
 description = "Bitcoin ESB : Common module"
-
-apply plugin: 'java'
-apply plugin: 'osgi'
-
-sourceCompatibility = 1.8
-
-repositories {
-    mavenCentral()
-}
 
 jar {
     manifest {

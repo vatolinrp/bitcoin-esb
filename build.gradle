@@ -9,6 +9,25 @@ buildscript {
     }
 }
 
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'osgi'
+
+    test {
+        useTestNG()
+    }
+
+    repositories {
+        mavenCentral()
+        maven { url "http://10.162.12.91/artifactory/repo" }
+    }
+
+    tasks.withType(JavaCompile) {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
+}
+
 task wrapper (type: Wrapper) {
     gradleVersion = '4.1'
     distributionType Wrapper.DistributionType.ALL
