@@ -9,11 +9,14 @@ buildscript {
     }
 }
 
+project.ext.set( "checkstyleConfigFile", file( "${checkstyleConfigFileLocation}" ) )
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'osgi'
     apply plugin: 'jacoco'
     apply plugin: 'maven-publish'
+    apply plugin: 'checkstyle'
 
     test {
         useTestNG()
@@ -61,6 +64,12 @@ subprojects {
                }
            }
        }
+   }
+   checkstyleMain {
+       configFile = project.checkstyleConfigFile
+   }
+   checkstyleTest {
+       configFile = project.checkstyleConfigFile
    }
 }
 
