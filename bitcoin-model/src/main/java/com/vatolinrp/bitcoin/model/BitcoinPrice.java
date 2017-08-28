@@ -8,7 +8,7 @@ import java.io.Serializable;
 @JsonIgnoreProperties( ignoreUnknown=true )
 public class BitcoinPrice implements Serializable
 {
-  private final static long serialVersionUID = 3300771043239850211L;
+  private static final long serialVersionUID = 3300771043239850211L;
 
   @JsonProperty("USD")
   private Currency usd;
@@ -23,23 +23,28 @@ public class BitcoinPrice implements Serializable
     return usd;
   }
 
-  public void setUsd(Currency usd) {
+  public void setUsd( final Currency usd )
+  {
     this.usd = usd;
   }
 
-  public Currency getCny() {
+  public Currency getCny()
+  {
     return cny;
   }
 
-  public void setCny(Currency cny) {
+  public void setCny( final Currency cny )
+  {
     this.cny = cny;
   }
 
-  public Currency getEur() {
+  public Currency getEur()
+  {
     return eur;
   }
 
-  public void setEur(Currency eur) {
+  public void setEur( final Currency eur )
+  {
     this.eur = eur;
   }
 }
