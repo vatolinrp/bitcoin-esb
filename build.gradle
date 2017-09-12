@@ -16,6 +16,8 @@ plugins {
     id 'org.sonarqube' version '2.5'
 }
 
+apply plugin: 'distribution'
+
 project.ext.set( "checkstyleConfigFile", file( "${checkstyleConfigFileLocation}" ) )
 
 subprojects {
@@ -79,6 +81,19 @@ subprojects {
    checkstyleTest {
        configFile = project.checkstyleConfigFile
    }
+}
+
+distributions {
+  main {
+    baseName = 'bitcoin-deploy'
+    contents {
+      from { "bitcoin-model/build/libs/bitcoin-model-${version}.jar" }
+      from { "bitcoin-wsdl/build/libs/bitcoin-wsdl-${version}.jar" }
+      from { "bitcoin-common/build/libs/bitcoin-common-${version}.jar" }
+      from { "bitcoin-rest/build/libs/bitcoin-rest-${version}.jar" }
+      from { "bitcoin-soap/build/libs/bitcoin-soap-${version}.jar" }
+    }
+  }
 }
 
 task wrapper (type: Wrapper) {
