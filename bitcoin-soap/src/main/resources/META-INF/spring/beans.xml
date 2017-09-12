@@ -16,7 +16,7 @@
 
   <jaxws:server id="soap-server"
                   address="http://0.0.0.0:8080/BitcoinService"
-                  wsdlLocation="wsdl/BitcoinService.wsdl">
+                  wsdlLocation="classpath:wsdl/BitcoinService.wsdl">
     <jaxws:serviceBean>
       <bean class="com.vatolinrp.bitcoin.service.BitcoinServiceImpl"/>
     </jaxws:serviceBean>

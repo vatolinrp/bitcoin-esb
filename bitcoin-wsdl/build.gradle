@@ -1,0 +1,36 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "no.nils:wsdl2java:0.10"
+    }
+}
+plugins {
+    id "no.nils.wsdl2java" version "0.10"
+}
+
+jar {
+    manifest {
+        instruction 'Bundle-ManifestVersion', '2'
+        instruction 'Bundle-Name', 'Bitcoin ESB WSDL :: OSGi bundle'
+        instruction 'Bundle-Vendor', 'SK'
+        instruction 'Export-Package',
+            'com.vatolinrp.bitcoin.generated.service',
+            '*'
+        instruction 'Import-Package',
+            '*'
+  }
+}
+
+wsdl2java {
+    wsdlsToGenerate = [
+        [ '-p',
+          'com.vatolinrp.bitcoin.generated.service',
+          "$projectDir/src/main/resources/wsdl/BitcoinService.wsdl"
+        ]
+    ]
+    wsdlDir = file("$projectDir/src/main/resources/wsdl")
+}
