@@ -1,7 +1,8 @@
 package com.vatolinrp.bitcoin.service;
 
 import com.vatolinrp.bitcoin.dao.PriceDAO;
-import com.vatolinrp.bitcoin.model.BitcoinPrice;
+import com.vatolinrp.bitcoin.model.BitcoinPriceValues;
+import com.vatolinrp.bitcoin.model.blockchain.BitcoinPrice;
 import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +23,20 @@ public class BitcoinPriceService
 
   @GET
   @Path("/bitcoin")
-  public BitcoinPrice getBitcoinPrices()
+  public BitcoinPriceValues getBitcoinPrices()
   {
-    return priceDAO.getPrice();
+    BitcoinPriceValues bitcoinPriceValues = new BitcoinPriceValues();
+    BitcoinPrice bitcoinPrice = priceDAO.getPrice();
+
+    if( bitcoinPrice.getUsd() != null ) {
+      bitcoinPriceValues.setUsd( bitcoinPrice.getUsd().getLast() );
+    }
+    if( bitcoinPrice.getCny() != null ) {
+      bitcoinPriceValues.setCny( bitcoinPrice.getCny().getLast() );
+    }
+    if( bitcoinPrice.getEur() != null ) {
+      bitcoinPriceValues.setEur( bitcoinPrice.getEur().getLast() );
+    }
+    return bitcoinPriceValues;
   }
 }

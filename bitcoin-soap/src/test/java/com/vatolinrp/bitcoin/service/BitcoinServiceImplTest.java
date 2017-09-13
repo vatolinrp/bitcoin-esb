@@ -3,8 +3,8 @@ package com.vatolinrp.bitcoin.service;
 import com.vatolinrp.bitcoin.dao.PriceDAO;
 import com.vatolinrp.bitcoin.generated.service.BitcoinPricesResponse;
 import com.vatolinrp.bitcoin.generated.service.BitcoinServiceInterface;
-import com.vatolinrp.bitcoin.model.BitcoinPrice;
-import com.vatolinrp.bitcoin.model.Currency;
+import com.vatolinrp.bitcoin.model.blockchain.BitcoinPrice;
+import com.vatolinrp.bitcoin.model.blockchain.Currency;
 import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.testng.Assert;
@@ -31,12 +31,9 @@ public class BitcoinServiceImplTest
     Mockito.when( priceDAO.getPrice() ).thenReturn( bitcoinPrice );
     BitcoinPricesResponse bitcoinPricesResponse = bitcoinService.getBitcoinPrices();
     Assert.assertNotNull( bitcoinPricesResponse );
-    Assert.assertNotNull( bitcoinPricesResponse.getUsd() );
-    Assert.assertNotNull( bitcoinPricesResponse.getCny() );
-    Assert.assertNotNull( bitcoinPricesResponse.getEur() );
-    Assert.assertEquals( bitcoinPricesResponse.getUsd().getLast(), 1.1 );
-    Assert.assertEquals( bitcoinPricesResponse.getCny().getLast(), 2.2 );
-    Assert.assertEquals( bitcoinPricesResponse.getEur().getLast(), 3.3 );
+    Assert.assertEquals( bitcoinPricesResponse.getUsd(), 1.1 );
+    Assert.assertEquals( bitcoinPricesResponse.getCny(), 2.2 );
+    Assert.assertEquals( bitcoinPricesResponse.getEur(), 3.3 );
   }
 
   @Test
@@ -60,33 +57,27 @@ public class BitcoinServiceImplTest
     bitcoinPrice.setUsd( currency );
     bitcoinPricesResponse = bitcoinService.getBitcoinPrices();
     Assert.assertNotNull( bitcoinPricesResponse );
-    Assert.assertNotNull( bitcoinPricesResponse.getUsd() );
     Assert.assertNull( bitcoinPricesResponse.getEur() );
     Assert.assertNull( bitcoinPricesResponse.getCny() );
-    Assert.assertEquals( bitcoinPricesResponse.getUsd().getLast(), 1.1 );
+    Assert.assertEquals( bitcoinPricesResponse.getUsd(), 1.1 );
 
     currency = new Currency();
     currency.setLast( 2.2 );
     bitcoinPrice.setCny( currency );
     bitcoinPricesResponse = bitcoinService.getBitcoinPrices();
     Assert.assertNotNull( bitcoinPricesResponse );
-    Assert.assertNotNull( bitcoinPricesResponse.getUsd() );
     Assert.assertNull( bitcoinPricesResponse.getEur() );
-    Assert.assertNotNull( bitcoinPricesResponse.getCny() );
-    Assert.assertEquals( bitcoinPricesResponse.getUsd().getLast(), 1.1 );
-    Assert.assertEquals( bitcoinPricesResponse.getCny().getLast(), 2.2 );
+    Assert.assertEquals( bitcoinPricesResponse.getUsd(), 1.1 );
+    Assert.assertEquals( bitcoinPricesResponse.getCny(), 2.2 );
 
     currency = new Currency();
     currency.setLast( 3.3 );
     bitcoinPrice.setEur( currency );
     bitcoinPricesResponse = bitcoinService.getBitcoinPrices();
     Assert.assertNotNull( bitcoinPricesResponse );
-    Assert.assertNotNull( bitcoinPricesResponse.getUsd() );
-    Assert.assertNotNull( bitcoinPricesResponse.getEur() );
-    Assert.assertNotNull( bitcoinPricesResponse.getCny() );
-    Assert.assertEquals( bitcoinPricesResponse.getUsd().getLast(), 1.1 );
-    Assert.assertEquals( bitcoinPricesResponse.getCny().getLast(), 2.2 );
-    Assert.assertEquals( bitcoinPricesResponse.getEur().getLast(), 3.3 );
+    Assert.assertEquals( bitcoinPricesResponse.getUsd(), 1.1 );
+    Assert.assertEquals( bitcoinPricesResponse.getCny(), 2.2 );
+    Assert.assertEquals( bitcoinPricesResponse.getEur(), 3.3 );
 
   }
 }

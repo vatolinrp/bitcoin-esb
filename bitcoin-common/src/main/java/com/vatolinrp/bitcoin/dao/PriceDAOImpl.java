@@ -1,7 +1,7 @@
 package com.vatolinrp.bitcoin.dao;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vatolinrp.bitcoin.model.BitcoinPrice;
+import com.vatolinrp.bitcoin.model.blockchain.BitcoinPrice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

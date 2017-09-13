@@ -1,6 +1,6 @@
 package com.vatolinrp.bitcoin.dao;
 
-import com.vatolinrp.bitcoin.model.BitcoinPrice;
+import com.vatolinrp.bitcoin.model.blockchain.BitcoinPrice;
 
 public interface PriceDAO
 {

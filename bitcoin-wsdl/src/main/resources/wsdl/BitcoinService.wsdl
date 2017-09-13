@@ -16,14 +16,9 @@
                 xmlns:localxsd="http://bitcoin.vatolinrp.com/xsd/BitcoinService">
       <xsd:complexType name="BitcoinPricesResponse">
         <xsd:sequence>
-          <xsd:element name="usd" type="localxsd:Currency" minOccurs="0"/>
-          <xsd:element name="cny" type="localxsd:Currency" minOccurs="0"/>
-          <xsd:element name="eur" type="localxsd:Currency" minOccurs="0"/>
-        </xsd:sequence>
-      </xsd:complexType>
-      <xsd:complexType name="Currency">
-        <xsd:sequence>
-          <xsd:element name="last" type="xsd:double"/>
+          <xsd:element name="usd" type="xsd:double" minOccurs="0"/>
+          <xsd:element name="cny" type="xsd:double" minOccurs="0"/>
+          <xsd:element name="eur" type="xsd:double" minOccurs="0"/>
         </xsd:sequence>
       </xsd:complexType>
     </xsd:schema>
