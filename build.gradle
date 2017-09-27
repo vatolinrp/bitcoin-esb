@@ -96,7 +96,7 @@ distributions {
   }
 }
 
-task clean(type: Delete) {
+task cleanBuildDir(type: Delete) {
   delete buildDir
 }
 
