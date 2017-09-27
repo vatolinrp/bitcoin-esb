@@ -16,7 +16,7 @@ plugins {
     id 'org.sonarqube' version '2.5'
 }
 
-apply plugin: 'distribution'
+apply plugin: 'maven-publish'
 
 project.ext.set( "checkstyleConfigFile", file( "${checkstyleConfigFileLocation}" ) )
 
@@ -62,6 +62,7 @@ subprojects {
        publications {
            mavenJava(MavenPublication) {
                artifact sourceJar
+               artifact "${buildDir}/libs/${artifactId}-${project.version}.jar"
            }
        }
        repositories {
@@ -83,17 +84,46 @@ subprojects {
    }
 }
 
-distributions {
-  main {
-    baseName = 'bitcoin-deploy'
-    contents {
-      from { "bitcoin-model/build/libs/bitcoin-model-${version}.jar" }
-      from { "bitcoin-wsdl/build/libs/bitcoin-wsdl-${version}.jar" }
-      from { "bitcoin-common/build/libs/bitcoin-common-${version}.jar" }
-      from { "bitcoin-rest/build/libs/bitcoin-rest-${version}.jar" }
-      from { "bitcoin-soap/build/libs/bitcoin-soap-${version}.jar" }
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact source: deployableZIP, extension: 'zip'
+        }
     }
-  }
+    repositories {
+        maven {
+            url "${artifactoryURL}"
+            credentials {
+                username = "${artifactoryUsername}"
+                password = "${artifactoryPassword}"
+            }
+        }
+    }
+}
+
+configurations {
+    deployable {
+        transitive = false
+    }
+}
+
+dependencies {
+    deployable project(':bitcoin-common')
+    deployable project(':bitcoin-model')
+    deployable project(':bitcoin-rest')
+    deployable project(':bitcoin-soap')
+    deployable project(':bitcoin-wsdl')
+}
+
+task deployableZIP(type: Zip) {
+    dependsOn configurations.deployable
+
+    baseName = "bitcoin-esb-${project.version}"
+    destinationDir = buildDir
+
+    configurations.deployable.collect {
+        from it
+    }
 }
 
 task cleanBuildDir(type: Delete) {
