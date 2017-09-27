@@ -1,5 +1,7 @@
 description = "Bitcoin ESB : REST module"
 
+apply plugin: 'com.benjaminsproule.swagger'
+
 jar {
     manifest {
         instruction 'Bundle-ManifestVersion', '2'
@@ -29,4 +31,18 @@ dependencies {
     testCompile "org.mockito:mockito-all:${mockitoVersion}"
     testCompile "org.springframework:spring-test:${springframeworkVersion}"
     testCompile "org.testng:testng:${testngVersion}"
+}
+
+swagger{
+    apiSource {
+        springmvc = false
+        locations = ['com.vatolinrp.bitcoin.service']
+        schemes = ['https']
+        host = 'vatolinrp.com:8080'
+        info {
+            title = 'Bitcoin Service'
+            version = 'v1'
+        }
+        swaggerDirectory = "$buildDir/swagger"
+    }
 }

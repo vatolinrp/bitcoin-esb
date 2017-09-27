@@ -13,6 +13,6 @@ node {
         sh "./gradlew sonarqube -i"
     }
     stage("Publish") {
-        sh "./gradlew publish -P artifactoryPassword=password"
+        sh "./gradlew bitcoin-rest:generateSwaggerDocumentation publish -P artifactoryPassword=password"
     }
 }

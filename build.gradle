@@ -9,6 +9,7 @@ buildscript {
     }
     dependencies {
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.5'
+        classpath 'com.benjaminsproule:swagger-gradle-plugin:0.1.4'
     }
 }
 
@@ -88,6 +89,7 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             artifact source: deployableZIP, extension: 'zip'
+            artifact source: file("${rootDir}/bitcoin-rest/build/swagger/swagger.json"), classifier: 'swagger'
         }
     }
     repositories {

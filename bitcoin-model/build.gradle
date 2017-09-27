@@ -15,4 +15,5 @@ jar {
 
 dependencies {
     compile "com.fasterxml.jackson.core:jackson-databind:${fasterxmlVersion}"
+    compile "io.swagger:swagger-annotations:${swaggerVersion}"
 }
