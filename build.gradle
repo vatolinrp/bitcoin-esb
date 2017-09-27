@@ -96,6 +96,10 @@ distributions {
   }
 }
 
+task clean(type: Delete) {
+  delete buildDir
+}
+
 task wrapper (type: Wrapper) {
     gradleVersion = '4.2'
     distributionType Wrapper.DistributionType.ALL
