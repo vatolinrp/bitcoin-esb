@@ -1,3 +1,5 @@
+import java.util.regex.Matcher
+
 buildscript {
     repositories {
         maven {
@@ -15,6 +17,7 @@ buildscript {
 
 plugins {
     id 'org.sonarqube' version '2.5'
+    id 'net.researchgate.release' version '2.6.0'
 }
 
 apply plugin: 'maven-publish'
@@ -73,7 +76,7 @@ subprojects {
        }
        repositories {
            maven {
-               url "${artifactoryURL}"
+               url "http://ecsc00300606.epam.com/artifactory/libs-${project.version.endsWith('SNAPSHOT') ? 'snapshot' : 'release'}-local"
                credentials {
                    username = "${artifactoryUsername}"
                    password = "${artifactoryPassword}"
@@ -99,7 +102,7 @@ publishing {
     }
     repositories {
         maven {
-            url "${artifactoryURL}"
+            url "http://ecsc00300606.epam.com/artifactory/libs-${project.version.endsWith('SNAPSHOT') ? 'snapshot' : 'release'}-local"
             credentials {
                 username = "${artifactoryUsername}"
                 password = "${artifactoryPassword}"
@@ -135,6 +138,39 @@ task deployableZIP(type: Zip) {
 
 task cleanBuildDir(type: Delete) {
   delete buildDir
+}
+
+release {
+    failOnCommitNeeded = true
+    failOnPublishNeeded = true
+    failOnSnapshotDependencies = true
+    failOnUnversionedFiles = true
+    failOnUpdateNeeded = true
+    revertOnFail = true
+    preCommitText = ''
+    preTagCommitMessage = '[Researchgate Release Plugin] pre tag commit'
+    tagCommitMessage = '[Researchgate Release Plugin]'
+    newVersionCommitMessage = '[Researchgate Release Plugin] version commit'
+    versionPropertyFile = 'gradle.properties'
+    buildTasks = ['releaseBuild']
+    versionPatterns = [
+        /(\d+)([^\d]*$)/: { Matcher m, Project p -> m.replaceAll("${(m[0][1] as int) + 1}${m[0][2]}") }
+    ]
+    git {
+        requireBranch = 'master'
+        pushToRemote = 'origin'
+        commitVersionFileOnly = false
+    }
+}
+
+task releaseBuild {
+    dependsOn(
+        'cleanBuildDir',
+        'clean',
+        'build',
+        'bitcoin-rest:generateSwaggerDocumentation',
+        'publish -P artifactoryPassword=password'
+    )
 }
 
 task wrapper (type: Wrapper) {
