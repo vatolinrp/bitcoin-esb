@@ -151,17 +151,26 @@ release {
 }
 
 task releaseBuild {
-    dependsOn(
-        'cleanBuildDir',
-        'clean',
-        'bitcoin-wsdl:build',
-        'bitcoin-model:build',
-        'bitcoin-common:build',
-        'bitcoin-soap:build',
-        'bitcoin-rest:build',
-        'bitcoin-rest:generateSwaggerDocumentation',
-        'publish -P artifactoryPassword=password'
-    )
+  dependsOn(
+          'cleanBuildDir',
+          'bitcoin-wsdl:clean',
+          'bitcoin-wsdl:build',
+          'bitcoin-wsdl:publish -P artifactoryPassword=password',
+          'bitcoin-model:clean',
+          'bitcoin-model:build',
+          'bitcoin-model:publish -P artifactoryPassword=password',
+          'bitcoin-common:clean',
+          'bitcoin-common:build',
+          'bitcoin-common:publish -P artifactoryPassword=password',
+          'bitcoin-soap:clean',
+          'bitcoin-soap:build',
+          'bitcoin-soap:publish -P artifactoryPassword=password',
+          'bitcoin-rest:clean',
+          'bitcoin-rest:build',
+          'bitcoin-rest:publish -P artifactoryPassword=password',
+          'bitcoin-rest:generateSwaggerDocumentation',
+          ':publish -P artifactoryPassword=password'
+  )
 }
 
 task wrapper (type: Wrapper) {
