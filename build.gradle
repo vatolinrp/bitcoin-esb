@@ -143,9 +143,9 @@ task cleanBuildDir(type: Delete) {
 }
 
 release {
-    preTagCommitMessage = '[Researchgate Release Plugin] pre tag commit'
+    preTagCommitMessage = '[Researchgate Release Plugin] pre tag commit:'
     tagCommitMessage = '[Researchgate Release Plugin]'
-    newVersionCommitMessage = '[Researchgate Release Plugin] version commit'
+    newVersionCommitMessage = '[Researchgate Release Plugin] version commit:'
     buildTasks = ['releaseBuild']
     git {
         requireBranch = 'master'
