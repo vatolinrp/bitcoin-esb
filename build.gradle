@@ -72,15 +72,6 @@ subprojects {
                artifact "${buildDir}/libs/${artifactId}-${project.version}.jar"
            }
        }
-       repositories {
-           maven {
-               url "http://ecsc00300606.epam.com/artifactory/libs-${project.version.endsWith('SNAPSHOT') ? 'snapshot' : 'release'}-local"
-               credentials {
-                   username = "${artifactoryUsername}"
-                   password = "${artifactoryPassword}"
-               }
-           }
-       }
    }
    checkstyleMain {
        configFile = project.checkstyleConfigFile
@@ -95,20 +86,26 @@ tasks.withType(PublishToMavenRepository) {
   it.dependsOn(':bitcoin-rest:generateSwaggerDocumentation')
 }
 
+allprojects {
+    apply plugin: 'maven-publish'
+    publishing {
+        repositories {
+            maven {
+                url "http://${project.artifactoryHost}/artifactory/libs-${project.version.endsWith('SNAPSHOT') ? 'snapshot' : 'release'}-local"
+                credentials {
+                    username = "${artifactoryUsername}"
+                    password = "${artifactoryPassword}"
+                }
+            }
+        }
+    }
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
             artifact source: deployableZIP, extension: 'zip'
             artifact source: file("${rootDir}/bitcoin-rest/build/swagger/swagger.json"), classifier: 'swagger'
-        }
-    }
-    repositories {
-        maven {
-            url "http://ecsc00300606.epam.com/artifactory/libs-${project.version.endsWith('SNAPSHOT') ? 'snapshot' : 'release'}-local"
-            credentials {
-                username = "${artifactoryUsername}"
-                password = "${artifactoryPassword}"
-            }
         }
     }
 }
