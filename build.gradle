@@ -143,7 +143,7 @@ release {
     preTagCommitMessage = '[Researchgate Release Plugin] pre tag commit:'
     tagCommitMessage = '[Researchgate Release Plugin]'
     newVersionCommitMessage = '[Researchgate Release Plugin] version commit:'
-    buildTasks = ['releaseBuild']
+    buildTasks = ['releaseBuild', 'publish']
     git {
         requireBranch = 'master'
         pushToRemote = 'origin'
@@ -154,17 +154,22 @@ release {
 task releaseBuild {
   dependsOn(
           'cleanBuildDir',
-          'bitcoin-wsdl:clean',
-          'bitcoin-wsdl:build',
-          'bitcoin-model:clean',
-          'bitcoin-model:build',
-          'bitcoin-common:clean',
-          'bitcoin-common:build',
-          'bitcoin-soap:clean',
-          'bitcoin-soap:build',
-          'bitcoin-rest:clean',
-          'bitcoin-rest:build'
-  )
+          project('bitcoin-wsdl').clean,
+          project('bitcoin-wsdl').build,
+          project('bitcoin-wsdl').publish,
+          project('bitcoin-model').clean,
+          project('bitcoin-model').build,
+          project('bitcoin-model').publish,
+          project('bitcoin-common').clean,
+          project('bitcoin-common').build,
+          project('bitcoin-common').publish,
+          project('bitcoin-soap').clean,
+          project('bitcoin-soap').build,
+          project('bitcoin-soap').publish,
+          project('bitcoin-rest').clean,
+          project('bitcoin-rest').build,
+          project('bitcoin-rest').publish
+)
 }
 
 task wrapper (type: Wrapper) {
