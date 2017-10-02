@@ -91,6 +91,10 @@ subprojects {
    }
 }
 
+tasks.withType(PublishToMavenRepository) {
+  it.dependsOn(':bitcoin-rest:generateSwaggerDocumentation')
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
