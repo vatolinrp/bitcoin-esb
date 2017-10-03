@@ -53,6 +53,18 @@ subprojects {
             xml.setEnabled( true )
             html.setDestination( file( "${buildDir}/jacocoHtml" ) )
         }
+        afterEvaluate {
+            classDirectories = files(
+                classDirectories.files.collect {
+                    fileTree(
+                        dir:it, excludes: [
+                            '**/com/vatolinrp/bitcoin/model/**',
+                            '**/com/vatolinrp/bitcoin/generated/**'
+                        ]
+                    )
+                }
+            )
+        }
     }
 
    task sourceJar( type: Jar, dependsOn: classes) {
