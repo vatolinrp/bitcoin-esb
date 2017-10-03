@@ -2,6 +2,7 @@ package com.vatolinrp.bitcoin.service;
 
 import com.vatolinrp.bitcoin.dao.PriceDAO;
 import com.vatolinrp.bitcoin.model.BitcoinPriceValues;
+import com.vatolinrp.bitcoin.model.Ping;
 import com.vatolinrp.bitcoin.model.blockchain.BitcoinPrice;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -48,5 +49,19 @@ public class BitcoinPriceService
       bitcoinPriceValues.setEur( bitcoinPrice.getEur().getLast() );
     }
     return bitcoinPriceValues;
+  }
+
+  @GET
+  @Path("/ping")
+  @ApiOperation( value = "Check system's health", response = Ping.class )
+  @ApiResponses( {
+    @ApiResponse( code = 200, message = "Operation finished successfully", response = Ping.class ),
+    @ApiResponse( code = 500, message = "Internal server error" )
+  } )
+  public Ping ping()
+  {
+    final Ping ping = new Ping();
+    ping.setStatus( "Active" );
+    return ping;
   }
 }
