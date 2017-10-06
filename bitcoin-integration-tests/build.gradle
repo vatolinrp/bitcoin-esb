@@ -1,0 +1,26 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+    maven { url "http://10.162.12.91/artifactory/repo" }
+}
+
+dependencies {
+    testCompile project (':bitcoin-model')
+    testCompile project (':bitcoin-wsdl')
+    testCompile "org.testng:testng:${testngVersion}"
+    testCompile "org.springframework:spring-web:${springframeworkVersion}"
+    testCompile "org.springframework:spring-context:${springframeworkVersion}"
+    testCompile "org.springframework:spring-test:${springframeworkVersion}"
+    testCompile "org.apache.cxf:cxf-rt-frontend-jaxws:${cxfVersion}"
+    testCompile "org.apache.cxf:cxf-rt-transports-http:${cxfVersion}"
+}
+
+test {
+    if( project.hasProperty('run-integr-test') ) {
+        useTestNG()
+        testLogging {
+            events "started", "passed", "skipped", "failed"
+        }
+    }
+}

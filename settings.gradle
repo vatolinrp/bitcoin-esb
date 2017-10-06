@@ -5,4 +5,5 @@ include 'bitcoin-rest'
 include 'bitcoin-soap'
 include 'bitcoin-wsdl'
 include 'bitcoin-functional-tests'
+include 'bitcoin-integration-tests'
 

@@ -22,7 +22,7 @@ apply plugin: 'maven-publish'
 
 project.ext.set( "checkstyleConfigFile", file( "${checkstyleConfigFileLocation}" ) )
 
-configure( subprojects - project(':bitcoin-functional-tests') ) { subproject ->
+configure( subprojects - project(':bitcoin-functional-tests') - project(':bitcoin-integration-tests') ) { subproject ->
     apply plugin: 'java'
     apply plugin: 'osgi'
     apply plugin: 'jacoco'
