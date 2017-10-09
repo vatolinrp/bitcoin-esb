@@ -5,9 +5,9 @@ repositories {
 }
 
 dependencies {
+    testCompile project (':bitcoin-model')
     testCompile "org.testng:testng:${testngVersion}"
-    testCompile "org.apache.httpcomponents:httpclient:${httpClientVersion}"
-    testCompile "org.json:json:${jsonVersion}"
+    testCompile "org.springframework:spring-web:${springframeworkVersion}"
 }
 
 test {

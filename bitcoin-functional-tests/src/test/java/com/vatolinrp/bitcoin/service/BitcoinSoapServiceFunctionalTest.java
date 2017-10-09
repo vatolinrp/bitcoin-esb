@@ -1,11 +1,9 @@
 package com.vatolinrp.bitcoin.service;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
@@ -18,33 +16,26 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 
 public class BitcoinSoapServiceFunctionalTest
 {
   @Test
   public void testGetOfWsdl()
   {
-    final HttpClient client = HttpClients.createDefault();
-    final HttpGet request = new HttpGet( "http://0.0.0.0:8080/BitcoinService?wsdl" );
-    HttpResponse response = null;
+    final RestTemplate restTemplate = new RestTemplate();
+    ResponseEntity<String> response = null;
     try {
-      response = client.execute( request );
-    } catch ( final IOException io ) {
+      response = restTemplate.getForEntity( "http://0.0.0.0:8080/BitcoinService?wsdl", String.class );
+    } catch ( final RestClientException io ) {
       Assert.fail( "Exception took place when tried to execute get request for service wsdl" );
     }
     Assert.assertNotNull( response );
-    Assert.assertNotNull( response.getStatusLine() );
-    Assert.assertEquals( response.getStatusLine().getStatusCode(), HttpStatus.SC_OK );
-    String rawResponse = null;
-    try {
-      rawResponse = EntityUtils.toString( response.getEntity() );
-    } catch ( final IOException io ) {
-      Assert.fail( "Exception took place when tried to retrieve the response" );
-    }
-    Assert.assertNotNull( rawResponse );
-    XPathFactory xpathFactory = XPathFactory.newInstance();
-    XPath xpath = xpathFactory.newXPath();
+    Assert.assertEquals( response.getStatusCode(), HttpStatus.OK );
+    Assert.assertNotNull( response.getBody() );
+
+    final String rawResponse = response.getBody();
+    final XPathFactory xpathFactory = XPathFactory.newInstance();
+    final XPath xpath = xpathFactory.newXPath();
     XPathExpression expr = null;
     try {
       expr = xpath.compile("/definitions/service/@name");
@@ -55,7 +46,7 @@ public class BitcoinSoapServiceFunctionalTest
     try {
       serviceName = (String)expr.evaluate( loadXMLFromString( rawResponse ), XPathConstants.STRING );
     } catch ( final XPathExpressionException e) {
-      Assert.fail();
+      Assert.fail( "Exception took place when tried to evaluate xpath expression" );
     }
     Assert.assertNotNull( serviceName );
     Assert.assertEquals( serviceName, "BitcoinService" );
@@ -63,12 +54,12 @@ public class BitcoinSoapServiceFunctionalTest
 
   private Document loadXMLFromString( final String xml )
   {
-    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     try{
-      DocumentBuilder builder = factory.newDocumentBuilder();
+      final DocumentBuilder builder = factory.newDocumentBuilder();
       return builder.parse( new ByteArrayInputStream( xml.getBytes() ) );
     } catch ( final Exception e) {
-      Assert.fail();
+      Assert.fail( "Exception occurred when parsing was taken place" );
     }
     return null;
   }
