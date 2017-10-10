@@ -2,6 +2,7 @@ package com.vatolinrp.bitcoin.service;
 
 import com.vatolinrp.bitcoin.dao.PriceDAO;
 import com.vatolinrp.bitcoin.model.BitcoinPriceValues;
+import com.vatolinrp.bitcoin.model.Ping;
 import com.vatolinrp.bitcoin.model.blockchain.BitcoinPrice;
 import com.vatolinrp.bitcoin.model.blockchain.Currency;
 import org.mockito.Mockito;
@@ -12,37 +13,47 @@ import org.testng.annotations.Test;
 public class BitcoinPriceServiceTest
 {
   @Test
-  public void getBitcoinPricesSuccessTest()
+  public void getBitcoinPricesSuccessfully()
   {
-    BitcoinPriceService bitcoinPriceService = new BitcoinPriceService();
-    PriceDAO priceDAO = Mockito.mock( PriceDAO.class );
+    final BitcoinPriceService bitcoinPriceService = new BitcoinPriceService();
+    final PriceDAO priceDAO = Mockito.mock( PriceDAO.class );
     ReflectionTestUtils.setField( bitcoinPriceService, "priceDAO", priceDAO );
-    Currency currencyUsd = new Currency();
+    final Currency currencyUsd = new Currency();
     currencyUsd.setLast( 1.1 );
-    Currency currencyCny = new Currency();
+    final Currency currencyCny = new Currency();
     currencyCny.setLast( 2.2 );
-    Currency currencyEur = new Currency();
+    final Currency currencyEur = new Currency();
     currencyEur.setLast( 3.3 );
-    BitcoinPrice bitcoinPrice = new BitcoinPrice();
+    final BitcoinPrice bitcoinPrice = new BitcoinPrice();
     bitcoinPrice.setUsd( currencyUsd );
     bitcoinPrice.setCny( currencyCny );
     bitcoinPrice.setEur( currencyEur );
     Mockito.when( priceDAO.getPrice() ).thenReturn( bitcoinPrice );
-    BitcoinPriceValues bitcoinPriceValues = bitcoinPriceService.getBitcoinPrices();
+    final BitcoinPriceValues bitcoinPriceValues = bitcoinPriceService.getBitcoinPrices();
     Assert.assertNotNull( bitcoinPriceValues );
     Assert.assertEquals( bitcoinPriceValues.getUsd(), 1.1 );
     Assert.assertEquals( bitcoinPriceValues.getCny(), 2.2 );
     Assert.assertEquals( bitcoinPriceValues.getEur(), 3.3 );
-
+    Mockito.verify( priceDAO, Mockito.only() ).getPrice();
   }
 
   @Test
-  public void getBitcoinPricesPartialSuccessTest()
+  public void checkPing()
   {
-    BitcoinPriceService bitcoinService = new BitcoinPriceService();
-    PriceDAO priceDAO = Mockito.mock( PriceDAO.class );
+    final BitcoinPriceService bitcoinPriceService = new BitcoinPriceService();
+    final Ping ping = bitcoinPriceService.ping();
+    Assert.assertNotNull( ping );
+    Assert.assertNotNull( ping.getStatus() );
+    Assert.assertEquals( ping.getStatus(), "Active" );
+  }
+
+  @Test
+  public void getBitcoinPricesPartialSuccessful()
+  {
+    final BitcoinPriceService bitcoinService = new BitcoinPriceService();
+    final PriceDAO priceDAO = Mockito.mock( PriceDAO.class );
     ReflectionTestUtils.setField( bitcoinService, "priceDAO", priceDAO );
-    BitcoinPrice bitcoinPrice = new BitcoinPrice();
+    final BitcoinPrice bitcoinPrice = new BitcoinPrice();
     Mockito.when( priceDAO.getPrice() ).thenReturn( bitcoinPrice );
 
 
@@ -51,6 +62,7 @@ public class BitcoinPriceServiceTest
     Assert.assertNull( bitcoinPriceValues.getUsd() );
     Assert.assertNull( bitcoinPriceValues.getCny() );
     Assert.assertNull( bitcoinPriceValues.getEur() );
+    Mockito.verify( priceDAO, Mockito.times( 1 ) ).getPrice();
 
     Currency currency = new Currency();
     currency.setLast( 1.1 );
@@ -60,6 +72,7 @@ public class BitcoinPriceServiceTest
     Assert.assertNull( bitcoinPriceValues.getEur() );
     Assert.assertNull( bitcoinPriceValues.getCny() );
     Assert.assertEquals( bitcoinPriceValues.getUsd(), 1.1 );
+    Mockito.verify( priceDAO, Mockito.times( 2 ) ).getPrice();
 
     currency = new Currency();
     currency.setLast( 2.2 );
@@ -69,6 +82,7 @@ public class BitcoinPriceServiceTest
     Assert.assertNull( bitcoinPriceValues.getEur() );
     Assert.assertEquals( bitcoinPriceValues.getUsd(), 1.1 );
     Assert.assertEquals( bitcoinPriceValues.getCny(), 2.2 );
+    Mockito.verify( priceDAO, Mockito.times( 3 ) ).getPrice();
 
     currency = new Currency();
     currency.setLast( 3.3 );
@@ -78,5 +92,6 @@ public class BitcoinPriceServiceTest
     Assert.assertEquals( bitcoinPriceValues.getUsd(), 1.1 );
     Assert.assertEquals( bitcoinPriceValues.getCny(), 2.2 );
     Assert.assertEquals( bitcoinPriceValues.getEur(), 3.3 );
+    Mockito.verify( priceDAO, Mockito.times( 4 ) ).getPrice();
   }
 }

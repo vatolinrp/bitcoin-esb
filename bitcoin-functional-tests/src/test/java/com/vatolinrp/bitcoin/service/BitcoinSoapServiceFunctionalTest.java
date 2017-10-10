@@ -20,7 +20,7 @@ import java.io.ByteArrayInputStream;
 public class BitcoinSoapServiceFunctionalTest
 {
   @Test
-  public void testGetOfWsdl()
+  public void checkGetOfWsdl()
   {
     final RestTemplate restTemplate = new RestTemplate();
     ResponseEntity<String> response = null;
@@ -52,6 +52,9 @@ public class BitcoinSoapServiceFunctionalTest
     Assert.assertEquals( serviceName, "BitcoinService" );
   }
 
+  /**
+   * Gets Document object out of xml string
+   */
   private Document loadXMLFromString( final String xml )
   {
     final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

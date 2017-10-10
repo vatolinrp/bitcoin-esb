@@ -21,7 +21,7 @@ import javax.ws.rs.core.MediaType;
 @Produces( MediaType.APPLICATION_JSON )
 @CrossOriginResourceSharing( allowAllOrigins = true )
 @Path( "/" )
-@Api( value = "/", description = "Api for getting bitcoin current price" )
+@Api( value = "/" )
 public class BitcoinPriceService
 {
   @Resource
@@ -36,8 +36,8 @@ public class BitcoinPriceService
   } )
   public BitcoinPriceValues getBitcoinPrices()
   {
-    BitcoinPriceValues bitcoinPriceValues = new BitcoinPriceValues();
-    BitcoinPrice bitcoinPrice = priceDAO.getPrice();
+    final BitcoinPriceValues bitcoinPriceValues = new BitcoinPriceValues();
+    final BitcoinPrice bitcoinPrice = priceDAO.getPrice();
 
     if( bitcoinPrice.getUsd() != null ) {
       bitcoinPriceValues.setUsd( bitcoinPrice.getUsd().getLast() );

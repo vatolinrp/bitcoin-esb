@@ -22,21 +22,17 @@ public class BitcoinServiceImpl implements BitcoinServiceInterface
   @Override
   public BitcoinPricesResponse getBitcoinPrices()
   {
-    BitcoinPricesResponse bitcoinPricesResponse = new BitcoinPricesResponse();
-    BitcoinPrice bitcoinPrice = priceDAO.getPrice();
-
+    final BitcoinPricesResponse bitcoinPricesResponse = new BitcoinPricesResponse();
+    final BitcoinPrice bitcoinPrice = priceDAO.getPrice();
     if( bitcoinPrice.getUsd() != null ) {
       bitcoinPricesResponse.setUsd( bitcoinPrice.getUsd().getLast() );
     }
-
     if( bitcoinPrice.getCny() != null ) {
       bitcoinPricesResponse.setCny( bitcoinPrice.getCny().getLast() );
     }
-
     if( bitcoinPrice.getEur() != null ) {
       bitcoinPricesResponse.setEur( bitcoinPrice.getEur().getLast() );
     }
-
     return bitcoinPricesResponse;
   }
 }

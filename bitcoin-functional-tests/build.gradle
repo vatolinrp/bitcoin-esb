@@ -1,9 +1,3 @@
-apply plugin: 'java'
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     testCompile project (':bitcoin-model')
     testCompile "org.testng:testng:${testngVersion}"

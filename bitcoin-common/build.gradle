@@ -1,5 +1,3 @@
-description = "Bitcoin ESB : Common module"
-
 jar {
     manifest {
         instruction 'Bundle-ManifestVersion', '2'
@@ -15,9 +13,7 @@ jar {
 }
 
 dependencies {
-
     compile project (':bitcoin-model')
-
     compile "org.springframework:spring-web:${springframeworkVersion}"
     compile "org.slf4j:slf4j-api:${slf4jVersion}"
     compile ("org.springframework.osgi:spring-osgi-core:${springframeworkOSGIVersion}") {
@@ -26,10 +22,8 @@ dependencies {
         exclude module: 'org.springframework.core'
         exclude module: 'org.springframework.context'
     }
-
     testCompile "org.testng:testng:${testngVersion}"
     testCompile "org.mockito:mockito-all:${mockitoVersion}"
     testCompile "org.springframework:spring-test:${springframeworkVersion}"
     testCompile "commons-io:commons-io:${commonsVersion}"
-
 }

@@ -1,5 +1,3 @@
-description = "Bitcoin ESB : Model module"
-
 jar {
     manifest {
         instruction 'Bundle-ManifestVersion', '2'

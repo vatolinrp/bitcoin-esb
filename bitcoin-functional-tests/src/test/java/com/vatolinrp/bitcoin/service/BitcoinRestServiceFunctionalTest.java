@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 public class BitcoinRestServiceFunctionalTest
 {
   @Test
-  public void testPing()
+  public void checkPing()
   {
     final RestTemplate restTemplate = new RestTemplate();
     ResponseEntity<Ping> response = null;

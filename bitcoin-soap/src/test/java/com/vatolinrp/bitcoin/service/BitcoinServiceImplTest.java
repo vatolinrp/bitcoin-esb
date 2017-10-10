@@ -13,36 +13,37 @@ import org.testng.annotations.Test;
 public class BitcoinServiceImplTest
 {
   @Test
-  public void getBitcoinPricesSuccessTest()
+  public void getBitcoinPricesSuccessfully()
   {
-    BitcoinServiceInterface bitcoinService = new BitcoinServiceImpl();
-    PriceDAO priceDAO = Mockito.mock( PriceDAO.class );
+    final BitcoinServiceInterface bitcoinService = new BitcoinServiceImpl();
+    final PriceDAO priceDAO = Mockito.mock( PriceDAO.class );
     ReflectionTestUtils.setField( bitcoinService, "priceDAO", priceDAO );
-    Currency currencyUsd = new Currency();
+    final Currency currencyUsd = new Currency();
     currencyUsd.setLast( 1.1 );
-    Currency currencyCny = new Currency();
+    final Currency currencyCny = new Currency();
     currencyCny.setLast( 2.2 );
-    Currency currencyEur = new Currency();
+    final Currency currencyEur = new Currency();
     currencyEur.setLast( 3.3 );
-    BitcoinPrice bitcoinPrice = new BitcoinPrice();
+    final BitcoinPrice bitcoinPrice = new BitcoinPrice();
     bitcoinPrice.setUsd( currencyUsd );
     bitcoinPrice.setCny( currencyCny );
     bitcoinPrice.setEur( currencyEur );
     Mockito.when( priceDAO.getPrice() ).thenReturn( bitcoinPrice );
-    BitcoinPricesResponse bitcoinPricesResponse = bitcoinService.getBitcoinPrices();
+    final BitcoinPricesResponse bitcoinPricesResponse = bitcoinService.getBitcoinPrices();
     Assert.assertNotNull( bitcoinPricesResponse );
     Assert.assertEquals( bitcoinPricesResponse.getUsd(), 1.1 );
     Assert.assertEquals( bitcoinPricesResponse.getCny(), 2.2 );
     Assert.assertEquals( bitcoinPricesResponse.getEur(), 3.3 );
+    Mockito.verify( priceDAO ).getPrice();
   }
 
   @Test
-  public void getBitcoinPricesPartialSuccessTest()
+  public void getBitcoinPricesPartialSuccessful()
   {
-    BitcoinServiceImpl bitcoinService = new BitcoinServiceImpl();
-    PriceDAO priceDAO = Mockito.mock( PriceDAO.class );
+    final BitcoinServiceImpl bitcoinService = new BitcoinServiceImpl();
+    final PriceDAO priceDAO = Mockito.mock( PriceDAO.class );
     ReflectionTestUtils.setField( bitcoinService, "priceDAO", priceDAO );
-    BitcoinPrice bitcoinPrice = new BitcoinPrice();
+    final BitcoinPrice bitcoinPrice = new BitcoinPrice();
     Mockito.when( priceDAO.getPrice() ).thenReturn( bitcoinPrice );
 
 
@@ -51,6 +52,7 @@ public class BitcoinServiceImplTest
     Assert.assertNull( bitcoinPricesResponse.getUsd() );
     Assert.assertNull( bitcoinPricesResponse.getCny() );
     Assert.assertNull( bitcoinPricesResponse.getEur() );
+    Mockito.verify( priceDAO, Mockito.times( 1 ) ).getPrice();
 
     Currency currency = new Currency();
     currency.setLast( 1.1 );
@@ -60,6 +62,7 @@ public class BitcoinServiceImplTest
     Assert.assertNull( bitcoinPricesResponse.getEur() );
     Assert.assertNull( bitcoinPricesResponse.getCny() );
     Assert.assertEquals( bitcoinPricesResponse.getUsd(), 1.1 );
+    Mockito.verify( priceDAO, Mockito.times( 2 ) ).getPrice();
 
     currency = new Currency();
     currency.setLast( 2.2 );
@@ -69,6 +72,7 @@ public class BitcoinServiceImplTest
     Assert.assertNull( bitcoinPricesResponse.getEur() );
     Assert.assertEquals( bitcoinPricesResponse.getUsd(), 1.1 );
     Assert.assertEquals( bitcoinPricesResponse.getCny(), 2.2 );
+    Mockito.verify( priceDAO, Mockito.times( 3 ) ).getPrice();
 
     currency = new Currency();
     currency.setLast( 3.3 );
@@ -78,6 +82,6 @@ public class BitcoinServiceImplTest
     Assert.assertEquals( bitcoinPricesResponse.getUsd(), 1.1 );
     Assert.assertEquals( bitcoinPricesResponse.getCny(), 2.2 );
     Assert.assertEquals( bitcoinPricesResponse.getEur(), 3.3 );
-
+    Mockito.verify( priceDAO, Mockito.times( 4 ) ).getPrice();
   }
 }

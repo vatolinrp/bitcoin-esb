@@ -22,26 +22,9 @@ apply plugin: 'maven-publish'
 
 project.ext.set( "checkstyleConfigFile", file( "${checkstyleConfigFileLocation}" ) )
 
-configure( subprojects - project(':bitcoin-functional-tests') - project(':bitcoin-integration-tests') ) { subproject ->
+configure( [ project(':bitcoin-common'), project(':bitcoin-rest'), project(':bitcoin-soap') ] ) {
     apply plugin: 'java'
-    apply plugin: 'osgi'
     apply plugin: 'jacoco'
-    apply plugin: 'maven-publish'
-    apply plugin: 'checkstyle'
-
-    test {
-        useTestNG()
-    }
-
-    repositories {
-        mavenCentral()
-        maven { url "http://10.162.12.91/artifactory/repo" }
-    }
-
-    tasks.withType(JavaCompile) {
-        sourceCompatibility = '1.8'
-        targetCompatibility = '1.8'
-    }
 
     jacoco {
         toolVersion = "${jacocoToolVersion}"
@@ -53,49 +36,85 @@ configure( subprojects - project(':bitcoin-functional-tests') - project(':bitcoi
             xml.setEnabled( true )
             html.setDestination( file( "${buildDir}/jacocoHtml" ) )
         }
-        afterEvaluate {
-            classDirectories = files(
-                classDirectories.files.collect {
-                    fileTree(
-                        dir:it, excludes: [
-                            '**/com/vatolinrp/bitcoin/model/**',
-                            '**/com/vatolinrp/bitcoin/generated/**'
-                        ]
-                    )
-                }
-            )
-        }
     }
 
-   task sourceJar( type: Jar, dependsOn: classes) {
-       classifier 'sources'
-       from sourceSets.main.allSource
-   }
-   task javadocJar( type: Jar, dependsOn: javadoc) {
-     classifier 'javadoc'
-     from 'build/docs/javadoc'
-   }
-
-   publishing {
-       publications {
-           mavenJava(MavenPublication) {
-               artifact sourceJar
-               artifact javadocJar
-               artifact "${buildDir}/libs/${artifactId}-${project.version}.jar"
-           }
-       }
-   }
-   checkstyleMain {
-       configFile = project.checkstyleConfigFile
-   }
-   checkstyleMain.exclude("**/com/vatolinrp/bitcoin/generated/service/**")
-   checkstyleTest {
-       configFile = project.checkstyleConfigFile
-   }
+    test {
+        useTestNG()
+    }
 }
 
-tasks.withType(PublishToMavenRepository) {
-  it.dependsOn(':bitcoin-rest:generateSwaggerDocumentation')
+configure( [ project(':bitcoin-common'), project(':bitcoin-rest'), project(':bitcoin-soap'), project(':bitcoin-model') ] ) {
+    apply plugin: 'java'
+    apply plugin: 'checkstyle'
+    apply plugin: 'maven-publish'
+
+    checkstyleMain {
+        configFile = project.checkstyleConfigFile
+    }
+
+    checkstyleTest {
+        configFile = project.checkstyleConfigFile
+    }
+
+    task javadocJar( type: Jar, dependsOn: javadoc) {
+        classifier 'javadoc'
+        from 'build/docs/javadoc'
+    }
+
+    publishing {
+        publications {
+            javaDocs( MavenPublication ) {
+                artifact javadocJar
+            }
+        }
+    }
+}
+
+configure( [ project(':bitcoin-functional-tests'), project(':bitcoin-integration-tests'), project(':bitcoin-model'),
+             project(':bitcoin-wsdl') ] ) {
+  sonarqube {
+    skipProject = true
+  }
+}
+
+configure( [ project(':bitcoin-common'), project(':bitcoin-rest'), project(':bitcoin-soap'), project(':bitcoin-model'),
+             project(':bitcoin-wsdl') ] ) {
+    apply plugin: 'java'
+    apply plugin: 'osgi'
+    apply plugin: 'maven-publish'
+
+    tasks.withType(JavaCompile) {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    task sourceJar( type: Jar, dependsOn: classes) {
+        classifier 'sources'
+        from sourceSets.main.allSource
+    }
+
+    publishing {
+        publications {
+            sources(MavenPublication) {
+                artifact sourceJar
+            }
+            bundles(MavenPublication) {
+                artifact "${buildDir}/libs/${project.artifactId}-${project.version}.jar"
+            }
+        }
+    }
+}
+
+configure( subprojects ) { subproject ->
+    apply plugin: 'java'
+    repositories {
+        mavenCentral()
+        maven { url "${mavenRepositoryUrl}" }
+    }
+}
+
+tasks.withType( PublishToMavenRepository ) {
+    it.dependsOn(':bitcoin-rest:generateSwaggerDocumentation')
 }
 
 allprojects {
@@ -115,8 +134,10 @@ allprojects {
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
+        deplZip(MavenPublication) {
             artifact source: deployableZIP, extension: 'zip'
+        }
+        swagger(MavenPublication) {
             artifact source: file("${rootDir}/bitcoin-rest/build/swagger/swagger.json"), classifier: 'swagger'
         }
     }
@@ -185,6 +206,6 @@ task releaseBuild {
 }
 
 task wrapper (type: Wrapper) {
-    gradleVersion = '4.2'
+    gradleVersion = '4.2.1'
     distributionType Wrapper.DistributionType.ALL
 }

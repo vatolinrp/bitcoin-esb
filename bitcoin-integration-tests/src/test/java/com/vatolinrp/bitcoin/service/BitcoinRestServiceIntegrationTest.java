@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 public class BitcoinRestServiceIntegrationTest
 {
   @Test
-  public void testBitcoinGet()
+  public void checkBitcoinGet()
   {
     final RestTemplate restTemplate = new RestTemplate();
     ResponseEntity<BitcoinPriceValues> response = null;

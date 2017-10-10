@@ -4,7 +4,10 @@ node {
     }
     stage("Build") {
         sh "chmod +x gradlew"
-        sh "./gradlew clean build -x test"
+        sh "./gradlew clean build -x test -x checkstyleMain -x checkstyleTest"
+    }
+    stage("Check code style") {
+        sh "./gradlew checkstyleMain checkstyleTest -x test"
     }
     stage("Unit tests") {
         sh "./gradlew test jacocoTestReport -i"

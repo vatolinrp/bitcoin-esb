@@ -16,7 +16,7 @@ public class BitcoinSoapServiceIntegrationTest extends AbstractTestNGSpringConte
   private BitcoinServiceInterface bitcoinServiceInterface;
 
   @Test
-  public void test()
+  public void checkSoapOperation()
   {
     final BitcoinPricesResponse bitcoinPricesResponse = bitcoinServiceInterface.getBitcoinPrices();
     Assert.assertNotNull( bitcoinPricesResponse );
