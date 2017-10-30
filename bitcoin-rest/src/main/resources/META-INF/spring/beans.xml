@@ -21,7 +21,6 @@
       <ref bean="bitcoinPriceService" />
     </jaxrs:serviceBeans>
     <jaxrs:providers>
-      <bean id="cors-filter" class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter"/>
       <bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider">
         <property name="mapper" ref="objectMapper" />
       </bean>

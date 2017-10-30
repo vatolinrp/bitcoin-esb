@@ -109,7 +109,7 @@ configure( subprojects ) { subproject ->
     apply plugin: 'java'
     repositories {
         mavenCentral()
-        maven { url "${mavenRepositoryUrl}" }
+        maven { url "${redhatMavenRepositoryUrl}" }
     }
 }
 
