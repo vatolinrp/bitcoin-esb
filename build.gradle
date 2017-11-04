@@ -206,6 +206,6 @@ task releaseBuild {
 }
 
 task wrapper (type: Wrapper) {
-    gradleVersion = '4.2.1'
+    gradleVersion = '4.3'
     distributionType Wrapper.DistributionType.ALL
 }
