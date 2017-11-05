@@ -20,8 +20,12 @@ public class BitcoinSoapServiceIntegrationTest extends AbstractTestNGSpringConte
   {
     final BitcoinPricesResponse bitcoinPricesResponse = bitcoinServiceInterface.getBitcoinPrices();
     Assert.assertNotNull( bitcoinPricesResponse );
-    Assert.assertNotNull( bitcoinPricesResponse.getUsd() );
-    Assert.assertNotNull( bitcoinPricesResponse.getCny() );
-    Assert.assertNotNull( bitcoinPricesResponse.getEur() );
+    Assert.assertEquals( bitcoinPricesResponse.getPriceResult().size(), 3 );
+    Assert.assertNotNull( bitcoinPricesResponse.getPriceResult().get( 0 ).getCurrencyCode() );
+    Assert.assertNotNull( bitcoinPricesResponse.getPriceResult().get( 0 ).getValue() );
+    Assert.assertNotNull( bitcoinPricesResponse.getPriceResult().get( 1 ).getCurrencyCode() );
+    Assert.assertNotNull( bitcoinPricesResponse.getPriceResult().get( 1 ).getValue() );
+    Assert.assertNotNull( bitcoinPricesResponse.getPriceResult().get( 2 ).getCurrencyCode() );
+    Assert.assertNotNull( bitcoinPricesResponse.getPriceResult().get( 2 ).getValue() );
   }
 }

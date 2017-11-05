@@ -2,8 +2,8 @@ package com.vatolinrp.bitcoin.service;
 
 import com.vatolinrp.bitcoin.dao.PriceDAO;
 import com.vatolinrp.bitcoin.model.BitcoinPriceValues;
+import com.vatolinrp.bitcoin.model.CurrencyCodeEnum;
 import com.vatolinrp.bitcoin.model.Ping;
-import com.vatolinrp.bitcoin.model.blockchain.BitcoinPrice;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -15,6 +15,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.Map;
 
 @Service
 @Produces( MediaType.APPLICATION_JSON )
@@ -35,17 +36,9 @@ public class BitcoinPriceService
   public BitcoinPriceValues getBitcoinPrices()
   {
     final BitcoinPriceValues bitcoinPriceValues = new BitcoinPriceValues();
-    final BitcoinPrice bitcoinPrice = priceDAO.getPrice();
-
-    if( bitcoinPrice.getUsd() != null ) {
-      bitcoinPriceValues.setUsd( bitcoinPrice.getUsd().getLast() );
-    }
-    if( bitcoinPrice.getCny() != null ) {
-      bitcoinPriceValues.setCny( bitcoinPrice.getCny().getLast() );
-    }
-    if( bitcoinPrice.getEur() != null ) {
-      bitcoinPriceValues.setEur( bitcoinPrice.getEur().getLast() );
-    }
+    final Map<CurrencyCodeEnum, Double> bitcoinPriceMap = priceDAO.getPrice();
+    bitcoinPriceMap.entrySet()
+      .forEach( entry -> bitcoinPriceValues.getPrices().put( entry.getKey().name(), entry.getValue() ) );
     return bitcoinPriceValues;
   }
 

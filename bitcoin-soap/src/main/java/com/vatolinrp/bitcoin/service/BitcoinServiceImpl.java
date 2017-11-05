@@ -3,11 +3,13 @@ package com.vatolinrp.bitcoin.service;
 import com.vatolinrp.bitcoin.dao.PriceDAO;
 import com.vatolinrp.bitcoin.generated.service.BitcoinPricesResponse;
 import com.vatolinrp.bitcoin.generated.service.BitcoinServiceInterface;
-import com.vatolinrp.bitcoin.model.blockchain.BitcoinPrice;
+import com.vatolinrp.bitcoin.generated.service.PriceResult;
+import com.vatolinrp.bitcoin.model.CurrencyCodeEnum;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.jws.WebService;
+import java.util.Map;
 
 @WebService( targetNamespace = "http://bitcoin.vatolinrp.com/wsdl/BitcoinService",
              endpointInterface = "com.vatolinrp.bitcoin.generated.service.BitcoinServiceInterface",
@@ -23,16 +25,13 @@ public class BitcoinServiceImpl implements BitcoinServiceInterface
   public BitcoinPricesResponse getBitcoinPrices()
   {
     final BitcoinPricesResponse bitcoinPricesResponse = new BitcoinPricesResponse();
-    final BitcoinPrice bitcoinPrice = priceDAO.getPrice();
-    if( bitcoinPrice.getUsd() != null ) {
-      bitcoinPricesResponse.setUsd( bitcoinPrice.getUsd().getLast() );
-    }
-    if( bitcoinPrice.getCny() != null ) {
-      bitcoinPricesResponse.setCny( bitcoinPrice.getCny().getLast() );
-    }
-    if( bitcoinPrice.getEur() != null ) {
-      bitcoinPricesResponse.setEur( bitcoinPrice.getEur().getLast() );
-    }
+    final Map<CurrencyCodeEnum, Double> bitcoinPriceMap = priceDAO.getPrice();
+    bitcoinPriceMap.entrySet().forEach( entry -> {
+      final PriceResult priceResult = new PriceResult();
+      priceResult.setCurrencyCode( entry.getKey().name() );
+      priceResult.setValue( entry.getValue() );
+      bitcoinPricesResponse.getPriceResult().add( priceResult );
+    });
     return bitcoinPricesResponse;
   }
 }

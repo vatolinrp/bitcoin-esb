@@ -23,8 +23,10 @@ public class BitcoinRestServiceIntegrationTest
     Assert.assertNotNull( response );
     Assert.assertEquals( response.getStatusCode(), HttpStatus.OK );
     Assert.assertNotNull( response.getBody() );
-    Assert.assertNotNull( response.getBody().getUsd() );
-    Assert.assertNotNull( response.getBody().getCny() );
-    Assert.assertNotNull( response.getBody().getEur() );
+    Assert.assertNotNull( response.getBody().getPrices() );
+    Assert.assertEquals( response.getBody().getPrices().size(), 3 );
+    Assert.assertNotNull( response.getBody().getPrices().get( "USD" ) );
+    Assert.assertNotNull( response.getBody().getPrices().get( "CNY" ) );
+    Assert.assertNotNull( response.getBody().getPrices().get( "EUR" ) );
   }
 }

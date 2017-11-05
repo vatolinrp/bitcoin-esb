@@ -2,86 +2,66 @@ package com.vatolinrp.bitcoin.service;
 
 import com.vatolinrp.bitcoin.dao.PriceDAO;
 import com.vatolinrp.bitcoin.generated.service.BitcoinPricesResponse;
-import com.vatolinrp.bitcoin.generated.service.BitcoinServiceInterface;
-import com.vatolinrp.bitcoin.model.blockchain.BitcoinPrice;
-import com.vatolinrp.bitcoin.model.blockchain.Currency;
+import com.vatolinrp.bitcoin.model.CurrencyCodeEnum;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.test.util.ReflectionTestUtils;
+import org.mockito.MockitoAnnotations;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import java.util.EnumMap;
+import java.util.Map;
 
 public class BitcoinServiceImplTest
 {
+  @Mock
+  private PriceDAO priceDAO;
+
+  @InjectMocks
+  private BitcoinServiceImpl bitcoinServiceInterface;
+
+  @BeforeClass
+  private void setup()
+  {
+    MockitoAnnotations.initMocks( this );
+  }
+
+  @AfterMethod
+  private void reset()
+  {
+    Mockito.reset( priceDAO );
+  }
+
   @Test
   public void getBitcoinPricesSuccessfully()
   {
-    final BitcoinServiceInterface bitcoinService = new BitcoinServiceImpl();
-    final PriceDAO priceDAO = Mockito.mock( PriceDAO.class );
-    ReflectionTestUtils.setField( bitcoinService, "priceDAO", priceDAO );
-    final Currency currencyUsd = new Currency();
-    currencyUsd.setLast( 1.1 );
-    final Currency currencyCny = new Currency();
-    currencyCny.setLast( 2.2 );
-    final Currency currencyEur = new Currency();
-    currencyEur.setLast( 3.3 );
-    final BitcoinPrice bitcoinPrice = new BitcoinPrice();
-    bitcoinPrice.setUsd( currencyUsd );
-    bitcoinPrice.setCny( currencyCny );
-    bitcoinPrice.setEur( currencyEur );
-    Mockito.when( priceDAO.getPrice() ).thenReturn( bitcoinPrice );
-    final BitcoinPricesResponse bitcoinPricesResponse = bitcoinService.getBitcoinPrices();
+    final Map<CurrencyCodeEnum, Double> bitcoinPriceValuesMap = new EnumMap<>( CurrencyCodeEnum.class );
+    bitcoinPriceValuesMap.put( CurrencyCodeEnum.USD, 1.1 );
+    bitcoinPriceValuesMap.put( CurrencyCodeEnum.CNY, 2.2 );
+    bitcoinPriceValuesMap.put( CurrencyCodeEnum.EUR, 3.3 );
+    Mockito.when( priceDAO.getPrice() ).thenReturn( bitcoinPriceValuesMap );
+    final BitcoinPricesResponse bitcoinPricesResponse = bitcoinServiceInterface.getBitcoinPrices();
     Assert.assertNotNull( bitcoinPricesResponse );
-    Assert.assertEquals( bitcoinPricesResponse.getUsd(), 1.1 );
-    Assert.assertEquals( bitcoinPricesResponse.getCny(), 2.2 );
-    Assert.assertEquals( bitcoinPricesResponse.getEur(), 3.3 );
-    Mockito.verify( priceDAO ).getPrice();
+    Assert.assertEquals( bitcoinPricesResponse.getPriceResult().get( 0 ).getCurrencyCode(), CurrencyCodeEnum.USD.name() );
+    Assert.assertEquals( bitcoinPricesResponse.getPriceResult().get( 0 ).getValue(), 1.1 );
+    Assert.assertEquals( bitcoinPricesResponse.getPriceResult().get( 1 ).getCurrencyCode(), CurrencyCodeEnum.CNY.name() );
+    Assert.assertEquals( bitcoinPricesResponse.getPriceResult().get( 1 ).getValue(), 2.2 );
+    Assert.assertEquals( bitcoinPricesResponse.getPriceResult().get( 2 ).getCurrencyCode(), CurrencyCodeEnum.EUR.name() );
+    Assert.assertEquals( bitcoinPricesResponse.getPriceResult().get( 2 ).getValue(), 3.3 );
+    Mockito.verify( priceDAO, Mockito.only() ).getPrice();
   }
 
   @Test
   public void getBitcoinPricesPartialSuccessful()
   {
-    final BitcoinServiceImpl bitcoinService = new BitcoinServiceImpl();
-    final PriceDAO priceDAO = Mockito.mock( PriceDAO.class );
-    ReflectionTestUtils.setField( bitcoinService, "priceDAO", priceDAO );
-    final BitcoinPrice bitcoinPrice = new BitcoinPrice();
-    Mockito.when( priceDAO.getPrice() ).thenReturn( bitcoinPrice );
-
-
-    BitcoinPricesResponse bitcoinPricesResponse = bitcoinService.getBitcoinPrices();
+    final Map<CurrencyCodeEnum, Double> bitcoinPriceValuesMap = new EnumMap<>( CurrencyCodeEnum.class );
+    Mockito.when( priceDAO.getPrice() ).thenReturn( bitcoinPriceValuesMap );
+    final BitcoinPricesResponse bitcoinPricesResponse = bitcoinServiceInterface.getBitcoinPrices();
     Assert.assertNotNull( bitcoinPricesResponse );
-    Assert.assertNull( bitcoinPricesResponse.getUsd() );
-    Assert.assertNull( bitcoinPricesResponse.getCny() );
-    Assert.assertNull( bitcoinPricesResponse.getEur() );
-    Mockito.verify( priceDAO, Mockito.times( 1 ) ).getPrice();
-
-    Currency currency = new Currency();
-    currency.setLast( 1.1 );
-    bitcoinPrice.setUsd( currency );
-    bitcoinPricesResponse = bitcoinService.getBitcoinPrices();
-    Assert.assertNotNull( bitcoinPricesResponse );
-    Assert.assertNull( bitcoinPricesResponse.getEur() );
-    Assert.assertNull( bitcoinPricesResponse.getCny() );
-    Assert.assertEquals( bitcoinPricesResponse.getUsd(), 1.1 );
-    Mockito.verify( priceDAO, Mockito.times( 2 ) ).getPrice();
-
-    currency = new Currency();
-    currency.setLast( 2.2 );
-    bitcoinPrice.setCny( currency );
-    bitcoinPricesResponse = bitcoinService.getBitcoinPrices();
-    Assert.assertNotNull( bitcoinPricesResponse );
-    Assert.assertNull( bitcoinPricesResponse.getEur() );
-    Assert.assertEquals( bitcoinPricesResponse.getUsd(), 1.1 );
-    Assert.assertEquals( bitcoinPricesResponse.getCny(), 2.2 );
-    Mockito.verify( priceDAO, Mockito.times( 3 ) ).getPrice();
-
-    currency = new Currency();
-    currency.setLast( 3.3 );
-    bitcoinPrice.setEur( currency );
-    bitcoinPricesResponse = bitcoinService.getBitcoinPrices();
-    Assert.assertNotNull( bitcoinPricesResponse );
-    Assert.assertEquals( bitcoinPricesResponse.getUsd(), 1.1 );
-    Assert.assertEquals( bitcoinPricesResponse.getCny(), 2.2 );
-    Assert.assertEquals( bitcoinPricesResponse.getEur(), 3.3 );
-    Mockito.verify( priceDAO, Mockito.times( 4 ) ).getPrice();
+    Assert.assertTrue( bitcoinPricesResponse.getPriceResult().isEmpty() );
+    Mockito.verify( priceDAO, Mockito.only() ).getPrice();
   }
 }
