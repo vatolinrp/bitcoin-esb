@@ -22,7 +22,6 @@ dependencies {
     compile project (':bitcoin-model')
     compile project (':bitcoin-common')
 
-    compile "org.apache.cxf:cxf-rt-rs-security-cors:${cxfSecurityVersion}"
     compile "com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:${fasterxmlVersion}"
     compile "javax.ws.rs:javax.ws.rs-api:${javaxRSVersion}"
 

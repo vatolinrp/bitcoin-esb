@@ -8,7 +8,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,7 +18,6 @@ import javax.ws.rs.core.MediaType;
 
 @Service
 @Produces( MediaType.APPLICATION_JSON )
-@CrossOriginResourceSharing( allowAllOrigins = true )
 @Path( "/" )
 @Api( value = "/" )
 public class BitcoinPriceService
