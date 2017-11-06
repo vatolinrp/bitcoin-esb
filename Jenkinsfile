@@ -3,7 +3,6 @@ node {
         checkout scm
     }
     stage("Build") {
-        sh "chmod +x gradlew"
         sh "./gradlew clean build -x test -x checkstyleMain -x checkstyleTest"
     }
     stage("Check code style") {
