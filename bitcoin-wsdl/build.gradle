@@ -2,19 +2,6 @@ plugins {
     id 'no.nils.wsdl2java' version '0.10'
 }
 
-jar {
-    manifest {
-        instruction 'Bundle-ManifestVersion', '2'
-        instruction 'Bundle-Name', 'Bitcoin ESB WSDL :: OSGi bundle'
-        instruction 'Bundle-Vendor', 'SK'
-        instruction 'Export-Package',
-            'com.vatolinrp.bitcoin.generated.service',
-            '*'
-        instruction 'Import-Package',
-            '*'
-  }
-}
-
 wsdl2java {
     wsdlsToGenerate = [
         [ '-p',

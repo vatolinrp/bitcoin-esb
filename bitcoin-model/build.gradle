@@ -1,16 +1,3 @@
-jar {
-    manifest {
-        instruction 'Bundle-ManifestVersion', '2'
-        instruction 'Bundle-Name', 'Bitcoin ESB Model :: OSGi bundle'
-        instruction 'Bundle-Vendor', 'SK'
-        instruction 'Export-Package',
-                'com.vatolinrp.bitcoin.model',
-                '*'
-        instruction 'Import-Package',
-                '*'
-    }
-}
-
 dependencies {
     compile "com.fasterxml.jackson.core:jackson-databind:${fasterxmlVersion}"
     compile "io.swagger:swagger-annotations:${swaggerVersion}"

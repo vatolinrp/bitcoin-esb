@@ -1,18 +1,3 @@
-jar {
-  manifest {
-    instruction 'Bundle-ManifestVersion', '2'
-    instruction 'Bundle-Name', 'Bitcoin ESB SOAP :: OSGi bundle'
-    instruction 'Bundle-Vendor', 'SK'
-    instruction 'Export-Package',
-            'com.vatolinrp.bitcoin.service',
-            '*'
-    instruction 'Import-Package',
-            'com.vatolinrp.bitcoin.dao',
-            'com.vatolinrp.bitcoin.generated.service',
-            '*'
-  }
-}
-
 dependencies {
     compile project (':bitcoin-model')
     compile project (':bitcoin-common')

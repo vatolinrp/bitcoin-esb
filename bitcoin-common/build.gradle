@@ -1,11 +1,5 @@
 jar {
     manifest {
-        instruction 'Bundle-ManifestVersion', '2'
-        instruction 'Bundle-Name', 'Bitcoin ESB Common :: OSGi bundle'
-        instruction 'Bundle-Vendor', 'SK'
-        instruction 'Export-Package',
-                'com.vatolinrp.bitcoin.dao',
-                '*'
         instruction 'Import-Package',
                 'org.springframework.beans.factory.config',
                 '*'
