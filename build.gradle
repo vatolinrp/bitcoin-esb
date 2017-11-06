@@ -1,24 +1,9 @@
-buildscript {
-    repositories {
-        maven {
-            url "http://repo1.maven.org/maven2/"
-        }
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-    dependencies {
-        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.5'
-        classpath 'com.benjaminsproule:swagger-gradle-plugin:0.1.4'
-    }
-}
-
 plugins {
     id 'org.sonarqube' version '2.5'
     id 'net.researchgate.release' version '2.6.0'
+    id 'maven-publish'
 }
 
-apply plugin: 'maven-publish'
 
 project.ext.set( "checkstyleConfigFile", file( "${checkstyleConfigFileLocation}" ) )
 

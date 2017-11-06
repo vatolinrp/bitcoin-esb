@@ -1,15 +1,5 @@
-buildscript {
-    repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-    dependencies {
-        classpath "no.nils:wsdl2java:0.10"
-    }
-}
 plugins {
-    id "no.nils.wsdl2java" version "0.10"
+    id 'no.nils.wsdl2java' version '0.10'
 }
 
 jar {

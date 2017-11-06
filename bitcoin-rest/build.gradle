@@ -1,4 +1,6 @@
-apply plugin: 'com.benjaminsproule.swagger'
+plugins {
+    id 'com.benjaminsproule.swagger' version '0.1.4'
+}
 
 jar {
     manifest {
