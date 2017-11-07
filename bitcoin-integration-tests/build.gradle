@@ -1,12 +1,16 @@
 dependencies {
     testCompile project (':bitcoin-model')
     testCompile project (':bitcoin-wsdl')
+    testCompile project (':bitcoin-common')
+    testCompile project (':bitcoin-rest')
+    testCompile project (':bitcoin-soap')
     testCompile "org.testng:testng:${testngVersion}"
     testCompile "org.springframework:spring-web:${springframeworkVersion}"
     testCompile "org.springframework:spring-context:${springframeworkVersion}"
     testCompile "org.springframework:spring-test:${springframeworkVersion}"
     testCompile "org.apache.cxf:cxf-rt-frontend-jaxws:${cxfVersion}"
-    testCompile "org.apache.cxf:cxf-rt-transports-http:${cxfVersion}"
+    testCompile "org.apache.cxf:cxf-rt-frontend-jaxrs:${cxfVersion}"
+    testCompile "org.apache.cxf:cxf-rt-transports-http-jetty:${cxfVersion}"
 }
 
 test {

@@ -11,6 +11,9 @@ node {
     stage("Unit tests") {
         sh "./gradlew test jacocoTestReport -i"
     }
+    stage("Integration tests") {
+        sh "./gradlew :bitcoin-integration-tests:test -Prun-integr-test=true -i"
+    }
     stage("Sonar") {
         sh "./gradlew sonarqube -i"
     }
