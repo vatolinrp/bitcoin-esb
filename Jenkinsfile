@@ -11,6 +11,9 @@ node {
     stage("Unit tests") {
         sh "./gradlew test jacocoTestReport -i"
     }
+    stage("Functional tests") {
+      sh "./gradlew :bitcoin-functional-tests:test -Prun-funct-test=true -i"
+    }
     stage("Integration tests") {
         sh "./gradlew :bitcoin-integration-tests:test -Prun-integr-test=true -i"
     }
