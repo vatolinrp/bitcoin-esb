@@ -15,9 +15,18 @@ node {
         sh "./gradlew :bitcoin-integration-tests:test -Prun-integr-test=true -i"
     }
     stage("Sonar") {
-        sh "./gradlew sonarqube -i"
+        withCredentials([
+            string(credentialsId: 'SONAR_HOST_URL', variable: 'SONAR_HOST_URL')
+        ]) {
+            sh "./gradlew sonarqube -i -PsonarUrl=$SONAR_HOST_URL"
+        }
     }
     stage("Publish") {
-        sh "./gradlew publish"
+        withCredentials([
+            [ $class: 'UsernamePasswordMultiBinding', credentialsId: 'ARTIFACTORY_CREDENTIALS', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD' ],
+            string(credentialsId: 'ARTIFACTORY_HOST', variable: 'ARTIFACTORY_HOST')
+        ]) {
+            sh "./gradlew publish -PartifactoryUsername=$USERNAME -PartifactoryPassword=$PASSWORD -PartifactoryHost=$ARTIFACTORY_HOST"
+        }
     }
 }
