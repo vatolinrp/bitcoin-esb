@@ -1,6 +1,6 @@
 dependencies {
     compile project (':bitcoin-model')
-    compile project (':bitcoin-common')
+    compile project (':bitcoin-dao')
     compile project (':bitcoin-wsdl')
     testCompile "org.mockito:mockito-all:${mockitoVersion}"
     testCompile "org.springframework:spring-test:${springframeworkVersion}"

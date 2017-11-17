@@ -1,7 +1,7 @@
 dependencies {
     testCompile project (':bitcoin-model')
     testCompile project (':bitcoin-wsdl')
-    testCompile project (':bitcoin-common')
+    testCompile project (':bitcoin-dao')
     testCompile project (':bitcoin-rest')
     testCompile project (':bitcoin-soap')
     testCompile "org.testng:testng:${testngVersion}"

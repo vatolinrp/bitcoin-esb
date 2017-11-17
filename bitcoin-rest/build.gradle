@@ -16,7 +16,7 @@ jar {
 
 dependencies {
     compile project (':bitcoin-model')
-    compile project (':bitcoin-common')
+    compile project (':bitcoin-dao')
 
     compile "com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:${fasterxmlVersion}"
     compile "javax.ws.rs:javax.ws.rs-api:${javaxRSVersion}"

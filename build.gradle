@@ -13,7 +13,7 @@ sonarqube {
     }
 }
 
-configure( [ project(':bitcoin-common'), project(':bitcoin-rest'), project(':bitcoin-soap') ] ) {
+configure( [ project(':bitcoin-dao'), project(':bitcoin-rest'), project(':bitcoin-soap') ] ) {
     apply plugin: 'java'
     apply plugin: 'jacoco'
 
@@ -34,7 +34,7 @@ configure( [ project(':bitcoin-common'), project(':bitcoin-rest'), project(':bit
     }
 }
 
-configure( [ project(':bitcoin-common'), project(':bitcoin-rest'), project(':bitcoin-soap'), project(':bitcoin-model') ] ) {
+configure( [ project(':bitcoin-dao'), project(':bitcoin-rest'), project(':bitcoin-soap'), project(':bitcoin-model') ] ) {
     apply plugin: 'java'
     apply plugin: 'checkstyle'
     apply plugin: 'maven-publish'
@@ -68,7 +68,7 @@ configure( [ project(':bitcoin-functional-tests'), project(':bitcoin-integration
   }
 }
 
-configure( [ project(':bitcoin-common'), project(':bitcoin-rest'), project(':bitcoin-soap'), project(':bitcoin-model'),
+configure( [ project(':bitcoin-dao'), project(':bitcoin-rest'), project(':bitcoin-soap'), project(':bitcoin-model'),
              project(':bitcoin-wsdl') ] ) {
     apply plugin: 'java'
     apply plugin: 'osgi'
@@ -141,7 +141,7 @@ configurations {
 }
 
 dependencies {
-    deployable project(':bitcoin-common')
+    deployable project(':bitcoin-dao')
     deployable project(':bitcoin-model')
     deployable project(':bitcoin-rest')
     deployable project(':bitcoin-soap')
@@ -184,9 +184,9 @@ task releaseBuild {
           project('bitcoin-model').clean,
           project('bitcoin-model').build,
           project('bitcoin-model').publish,
-          project('bitcoin-common').clean,
-          project('bitcoin-common').build,
-          project('bitcoin-common').publish,
+          project('bitcoin-dao').clean,
+          project('bitcoin-dao').build,
+          project('bitcoin-dao').publish,
           project('bitcoin-soap').clean,
           project('bitcoin-soap').build,
           project('bitcoin-soap').publish,
