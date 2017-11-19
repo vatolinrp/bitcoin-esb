@@ -24,7 +24,7 @@
     </property>
     <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_FALLBACK" />
   </bean>
-  <jaxrs:server id="server" address="http://0.0.0.0:8081">
+  <jaxrs:server id="server" address="http://0.0.0.0:${rest.service.port}">
     <jaxrs:serviceBeans>
       <ref bean="bitcoinPriceService" />
     </jaxrs:serviceBeans>
@@ -39,11 +39,11 @@
   </jaxrs:server>
   <jaxws:client id="soapClient"
                 serviceClass="com.vatolinrp.bitcoin.generated.service.BitcoinServiceInterface"
-                address="http://localhost:8082/BitcoinService"
+                address="http://${soap.service.host}:${soap.service.port}/BitcoinService"
                 wsdlLocation="classpath:wsdl/BitcoinService.wsdl"/>
   <bean id="bitcoinServiceInterface" class="com.vatolinrp.bitcoin.service.BitcoinServiceImpl"/>
   <jaxws:server id="soap-server"
-                address="http://0.0.0.0:8082/BitcoinService"
+                address="http://0.0.0.0:${soap.service.port}/BitcoinService"
                 wsdlLocation="classpath:wsdl/BitcoinService.wsdl">
     <jaxws:serviceBean>
       <bean class="com.vatolinrp.bitcoin.service.BitcoinServiceImpl"/>

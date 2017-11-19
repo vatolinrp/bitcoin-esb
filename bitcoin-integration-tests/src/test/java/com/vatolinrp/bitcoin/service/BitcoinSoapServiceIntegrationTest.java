@@ -2,6 +2,7 @@ package com.vatolinrp.bitcoin.service;
 
 import com.vatolinrp.bitcoin.generated.service.BitcoinPricesResponse;
 import com.vatolinrp.bitcoin.generated.service.BitcoinServiceInterface;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
@@ -28,6 +29,12 @@ public class BitcoinSoapServiceIntegrationTest extends AbstractTestNGSpringConte
   @Resource
   private BitcoinServiceInterface bitcoinServiceInterface;
 
+  @Value("${soap.service.host}")
+  private String soapServiceHost;
+
+  @Value("${soap.service.port}")
+  private int soapServicePort;
+
   @Test
   public void checkSoapOperation()
   {
@@ -48,7 +55,8 @@ public class BitcoinSoapServiceIntegrationTest extends AbstractTestNGSpringConte
     final RestTemplate restTemplate = new RestTemplate();
     ResponseEntity<String> response = null;
     try {
-      response = restTemplate.getForEntity( "http://localhost:8082/BitcoinService?wsdl", String.class );
+      final String url = "http://" + soapServiceHost + ":" + soapServicePort + "/BitcoinService?wsdl";
+      response = restTemplate.getForEntity( url, String.class );
     } catch ( final RestClientException io ) {
       Assert.fail( "Exception took place when tried to execute get request for service wsdl" );
     }

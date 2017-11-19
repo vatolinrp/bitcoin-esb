@@ -2,6 +2,7 @@ package com.vatolinrp.bitcoin.service;
 
 import com.vatolinrp.bitcoin.model.BitcoinPriceValues;
 import com.vatolinrp.bitcoin.model.Ping;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
@@ -14,13 +15,21 @@ import org.testng.annotations.Test;
 @ContextConfiguration( locations = { "classpath:integr-testing.xml" } )
 public class BitcoinRestServiceIntegrationTest extends AbstractTestNGSpringContextTests
 {
+  @Value("${rest.service.host}")
+  private String restServiceHost;
+
+  @Value("${rest.service.port}")
+  private int restServicePort;
+
+  final RestTemplate restTemplate = new RestTemplate();
+
   @Test
   public void checkBitcoinGet()
   {
-    final RestTemplate restTemplate = new RestTemplate();
     ResponseEntity<BitcoinPriceValues> response = null;
     try {
-      response = restTemplate.getForEntity( "http://localhost:8081/bitcoin", BitcoinPriceValues.class );
+      final String url = "http://" + restServiceHost + ":" + restServicePort + "/bitcoin";
+      response = restTemplate.getForEntity( url, BitcoinPriceValues.class );
     } catch ( final RestClientException io ) {
       Assert.fail( "Exception took place when tried to execute get request to service" );
     }
@@ -37,10 +46,10 @@ public class BitcoinRestServiceIntegrationTest extends AbstractTestNGSpringConte
   @Test
   public void checkPing()
   {
-    final RestTemplate restTemplate = new RestTemplate();
     ResponseEntity<Ping> response = null;
     try {
-      response = restTemplate.getForEntity( "http://localhost:8081/ping", Ping.class );
+      final String url = "http://" + restServiceHost + ":" + restServicePort + "/ping";
+      response = restTemplate.getForEntity( url, Ping.class );
     } catch ( final RestClientException io ) {
       Assert.fail( "Exception took place when tried to execute get request to service" );
     }
