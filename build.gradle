@@ -54,8 +54,10 @@ configure( [ project(':bitcoin-dao'), project(':bitcoin-rest'), project(':bitcoi
 
     publishing {
         publications {
-            javaDocs( MavenPublication ) {
-                artifact javadocJar
+            if( "master" == project.branch ) {
+                javaDocs(MavenPublication) {
+                    artifact javadocJar
+                }
             }
         }
     }
@@ -84,13 +86,24 @@ configure( [ project(':bitcoin-dao'), project(':bitcoin-rest'), project(':bitcoi
         from sourceSets.main.allSource
     }
 
+    task bundleJar( type: Jar, dependsOn: classes) {
+        if( "master" == project.branch ) {
+          classifier 'bundle'
+        } else {
+          classifier "bundle-${project.branch}"
+        }
+        from "${buildDir}/libs/${project.artifactId}-${project.version}.jar"
+    }
+
     publishing {
         publications {
-            sources(MavenPublication) {
-                artifact sourceJar
+            if( "master" == project.branch ) {
+                sources(MavenPublication) {
+                    artifact sourceJar
+                }
             }
             bundles(MavenPublication) {
-                artifact "${buildDir}/libs/${project.artifactId}-${project.version}.jar"
+                artifact bundleJar
             }
         }
     }
@@ -127,8 +140,10 @@ publishing {
         deplZip(MavenPublication) {
             artifact source: deployableZIP, extension: 'zip'
         }
-        swagger(MavenPublication) {
-            artifact source: file("${rootDir}/bitcoin-rest/build/swagger/swagger.json"), classifier: 'swagger'
+        if( "master" == project.branch ) {
+            swagger(MavenPublication) {
+                artifact source: file("${rootDir}/bitcoin-rest/build/swagger/swagger.json"), classifier: 'swagger'
+            }
         }
     }
 }
@@ -150,7 +165,11 @@ dependencies {
 task deployableZIP(type: Zip) {
     dependsOn configurations.deployable
 
-    baseName = "bitcoin-esb-${project.version}"
+    if( "master" == project.branch ) {
+      classifier = "bitcoin-esb-${project.version}"
+    } else {
+      classifier = "bitcoin-esb-${project.version}-${project.branch}"
+    }
     destinationDir = buildDir
 
     configurations.deployable.collect {

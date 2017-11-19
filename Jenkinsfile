@@ -29,7 +29,7 @@ node {
             [ $class: 'UsernamePasswordMultiBinding', credentialsId: 'ARTIFACTORY_CREDENTIALS', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD' ],
             string(credentialsId: 'ARTIFACTORY_HOST', variable: 'ARTIFACTORY_HOST')
         ]) {
-            sh "./gradlew publish -PartifactoryUsername=$USERNAME -PartifactoryPassword=$PASSWORD -PartifactoryHost=$ARTIFACTORY_HOST"
+            sh "./gradlew publish -PartifactoryUsername=$USERNAME -PartifactoryPassword=$PASSWORD -PartifactoryHost=$ARTIFACTORY_HOST -Pbranch=${env.BRANCH_NAME}"
         }
     }
 }
