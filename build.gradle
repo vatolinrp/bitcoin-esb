@@ -99,8 +99,7 @@ configure( [ project(':bitcoin-dao'), project(':bitcoin-rest'), project(':bitcoi
 configure( subprojects ) { subproject ->
     apply plugin: 'java'
     repositories {
-        mavenCentral()
-        maven { url "${redhatMavenRepositoryUrl}" }
+        jcenter()
     }
 }
 
