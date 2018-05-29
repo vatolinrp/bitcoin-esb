@@ -1,5 +1,6 @@
 plugins {
     id 'com.benjaminsproule.swagger' version '0.1.4'
+    id 'io.spring.dependency-management' version '1.0.5.RELEASE'
 }
 
 jar {
@@ -14,6 +15,12 @@ jar {
     }
 }
 
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework:spring-framework-bom:3.2.12.RELEASE'
+    }
+}
+
 dependencies {
     compile project (':bitcoin-model')
     compile project (':bitcoin-dao')
@@ -22,7 +29,7 @@ dependencies {
     compile "javax.ws.rs:javax.ws.rs-api:${javaxRSVersion}"
 
     testCompile "org.mockito:mockito-all:${mockitoVersion}"
-    testCompile "org.springframework:spring-test:${springframeworkVersion}"
+    testCompile "org.springframework:spring-test"
     testCompile "org.testng:testng:${testngVersion}"
 }
 
